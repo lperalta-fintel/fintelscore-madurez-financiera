@@ -144,7 +144,7 @@ export async function sendWebhook(payload: {
       return { success: true, skipped: true };
     }
 
-    const webhookUrl = settings.webhook_url?.trim();
+    const webhookUrl = (import.meta.env.VITE_WEBHOOK_URL?.trim()) || settings.webhook_url?.trim();
     if (!webhookUrl) {
       return { success: false, error: 'Webhook URL not configured' };
     }
