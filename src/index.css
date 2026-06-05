@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  body {
+    @apply bg-fintel-bg-light text-fintel-text-primary antialiased;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/95 backdrop-blur-[16px] border border-fintel-border-light shadow-glass;
+  }
+
+  .glass-subtle {
+    @apply bg-white/80 backdrop-blur-[12px] border border-fintel-border-light/50 shadow-card;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl border border-fintel-border-light shadow-card transition-shadow duration-300 hover:shadow-card-hover;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-fintel-cyan to-fintel-blue-medium text-white font-semibold
+           py-3 px-8 rounded-xl transition-all duration-300 will-change-transform
+           hover:scale-105 hover:shadow-neon-cyan active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply bg-gradient-to-r from-fintel-green to-fintel-green-light text-fintel-blue-dark font-semibold
+           py-3 px-8 rounded-xl transition-all duration-300 will-change-transform
+           hover:scale-105 hover:shadow-neon-green active:scale-95;
+  }
+
+  .input-light {
+    @apply w-full bg-fintel-bg-light border border-fintel-border-light rounded-xl px-4 py-3
+           text-fintel-text-primary placeholder-fintel-text-secondary transition-all duration-200
+           focus:outline-none focus:border-fintel-cyan focus:shadow-input-focus;
+  }
+
+  .card-option {
+    @apply card p-4 cursor-pointer
+           hover:border-fintel-cyan/50 hover:scale-[1.01];
+  }
+
+  .card-option.selected {
+    @apply bg-fintel-cyan/10 border-fintel-cyan shadow-neon-cyan;
+  }
+
+  .progress-shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.4) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
+}
+
+@layer utilities {
+  .text-gradient-cyan {
+    @apply bg-gradient-to-r from-fintel-cyan to-fintel-blue-medium bg-clip-text text-transparent;
+  }
+
+  .text-gradient-green {
+    @apply bg-gradient-to-r from-fintel-green to-fintel-green-light bg-clip-text text-transparent;
+  }
+
+  .animate-gpu {
+    transform: translateZ(0);
+    will-change: transform, opacity;
+  }
+}
