@@ -125,26 +125,33 @@ export async function sendWebhook(payload: {
   timestamp: string;
 }) {
   try {
-    const { data: webhookData, error: webhookError } = await supabase
-      .from('system_settings')
-      .select('key, value')
-      .in('key', ['webhook_url', 'webhook_enabled']);
+    const envWebhookUrl = import.meta.env.VITE_WEBHOOK_URL?.trim();
 
-    if (webhookError || !webhookData) {
-      return { success: false, error: 'Webhook configuration not found' };
+    let webhookUrl = envWebhookUrl;
+
+    if (!webhookUrl) {
+      const { data: webhookData, error: webhookError } = await supabase
+        .from('system_settings')
+        .select('key, value')
+        .in('key', ['webhook_url', 'webhook_enabled']);
+
+      if (webhookError || !webhookData) {
+        return { success: false, error: 'Webhook configuration not found' };
+      }
+
+      const settings = webhookData.reduce((acc, item) => {
+        acc[item.key] = item.value;
+        return acc;
+      }, {} as Record<string, string>);
+
+      if (settings.webhook_enabled !== 'true') {
+        console.log('Webhook is disabled');
+        return { success: true, skipped: true };
+      }
+
+      webhookUrl = settings.webhook_url?.trim();
     }
 
-    const settings = webhookData.reduce((acc, item) => {
-      acc[item.key] = item.value;
-      return acc;
-    }, {} as Record<string, string>);
-
-    if (settings.webhook_enabled !== 'true') {
-      console.log('Webhook is disabled');
-      return { success: true, skipped: true };
-    }
-
-    const webhookUrl = (import.meta.env.VITE_WEBHOOK_URL?.trim()) || settings.webhook_url?.trim();
     if (!webhookUrl) {
       return { success: false, error: 'Webhook URL not configured' };
     }
